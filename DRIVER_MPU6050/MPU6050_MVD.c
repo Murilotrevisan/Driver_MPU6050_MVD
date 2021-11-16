@@ -73,10 +73,10 @@ error_t MPU6050_init(MPU6050_t mpu) {
 	//Realiza todas as configurações em uma única função
 	//para facilitar a execução do programa na main
 
-	MPU6050_smprt(MPU6050_t mpu);
-	MPU6050_config(MPU6050_t mpu);
-	MPU6050_accel_config(MPU6050_t mpu);
-	MPU6050_gyro_config(MPU6050_t mpu);
+	MPU6050_smprt(mpu);
+	MPU6050_config(mpu);
+	MPU6050_accel_config(mpu);
+	MPU6050_gyro_config(mpu);
 
 	return 0;
 }
