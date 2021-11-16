@@ -98,23 +98,22 @@
 /* Structs de configuração */
 
 typedef struct {
+	//Config
 	uint8_t FSyncEnable;	//FSYNC
 	uint8_t LowPassFilter;	//DLPF
-} MPU6050_config_t ;
-
-typedef struct {
+	//Sample config
+	uint8_t Sample;
+	//GyroRangeconfig
 	uint8_t GyroRange;
-}MPU6050_gyro_config_t;
-
-typedef struct {
+	//AccelConfig
 	uint8_t AccelRange;
-}MPU6050_accel_config_t;
+
+}MPU6050_config_t;
+
 
 typedef struct {
 	i2c_device_t device;
 	MPU6050_config_t config;
-	MPU6050_gyro_config_t GyroConfig;
-	MPU6050_accel_config_t AccelConfig;
 }MPU6050_t;
 
 /* Structs de leitura dos valores */
@@ -129,10 +128,11 @@ typedef struct {
 	float Temp;
 } MPU6050_values_t;
 
+error_t MPU6050_smprt(MPU6050_t mpu);
 error_t MPU6050_config(MPU6050_t mpu);
 error_t MPU6050_gyro_config(MPU6050_t mpu);
 error_t MPU6050_accel_config(MPU6050_t mpu);
-
+error_t MPU6050_init(MPU6050_t mpu);
 
 
 
