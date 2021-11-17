@@ -26,6 +26,7 @@
 
 // Registradores de leitura dos dados
 // Acelerômetro
+#define MPU_MEASURES		(uint16_t)(0x3B)
 #define MPU_ACCEL_XOUT_H	(uint16_t)(0x3B)
 #define MPU_ACCEL_XOUT_L	(uint16_t)(0x3C)
 #define MPU_ACCEL_YOUT_H	(uint16_t)(0x3D)
@@ -122,17 +123,26 @@ typedef struct {
 	float AccelX;
 	float AccelY;
 	float AccelZ;
+	float Temp;
 	float GyroX;
 	float GyroY;
 	float GyroZ;
-	float Temp;
 } MPU6050_values_t;
 
+//Funções de configuração
 error_t MPU6050_smprt(MPU6050_t mpu);
 error_t MPU6050_config(MPU6050_t mpu);
 error_t MPU6050_gyro_config(MPU6050_t mpu);
 error_t MPU6050_accel_config(MPU6050_t mpu);
+
+//Função de configuração geral, aplica todas as configs
 error_t MPU6050_init(MPU6050_t mpu);
+
+//Criação do buffer para leitura burst-read
+buffer_view_t buffer_view =  { .data = buffer, .size = sizeof(buffer) };
+
+//Função para leitura burst-read
+error_t MPU6050_measure(MPU6050_t mpu, MPU6050_values_t *medida);
 
 
 
