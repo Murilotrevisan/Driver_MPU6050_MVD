@@ -33,7 +33,7 @@ MPU6050_t mpu = {
     .device = dev
 }
 
-mpu6050_init(mpu);
+MPU6050_init(mpu);
 
 MPU6050_values_t medida;
 ~~~
