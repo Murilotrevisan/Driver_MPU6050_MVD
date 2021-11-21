@@ -138,9 +138,6 @@ error_t MPU6050_accel_config(MPU6050_t mpu);
 //Função de configuração geral, aplica todas as configs
 error_t MPU6050_init(MPU6050_t mpu);
 
-//Criação do buffer para leitura burst-read
-buffer_view_t buffer_view =  { .data = buffer, .size = sizeof(buffer) };
-
 //Função para leitura burst-read
 error_t MPU6050_measure(MPU6050_t mpu, MPU6050_values_t *medida);
 

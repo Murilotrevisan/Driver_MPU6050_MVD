@@ -92,6 +92,10 @@ error_t MPU6050_measure(MPU6050_t mpu, MPU6050_values_t *medida) {
 	//Converte para as medidas necessárias
 	//Armazena na struct de resultados
 
+	//Criação do buffer para leitura burst-read
+	uint8_t buffer[13] = { 0 };
+	buffer_view_t buffer_view =  { .data = buffer, .size = sizeof(buffer) };
+
 	//Leitura de todos os registradores de resultados e save no buffer
 	error_t value_raw = i2c_readN(mpu.device, MPU_MEASURES, buffer_view);
 
