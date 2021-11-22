@@ -97,7 +97,12 @@ error_t MPU6050_measure(MPU6050_t mpu, MPU6050_values_t *medida) {
 	buffer_view_t buffer_view =  { .data = buffer, .size = sizeof(buffer) };
 
 	//Leitura de todos os registradores de resultados e save no buffer
-	error_t value_raw = i2c_readN(mpu.device, MPU_MEASURES, buffer_view);
+	error_t error = i2c_readN(mpu.device, MPU_MEASURES, buffer_view);
+
+	//Tratamento de erro da HAL
+	if (error) {
+		return error;
+	}
 
 	//Separação das componentes da leitura
 	//Acelerômetro
