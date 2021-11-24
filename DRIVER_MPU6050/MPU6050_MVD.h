@@ -16,35 +16,35 @@
 // Name				//Adress(hex)
 
 // Registradores de configuração
-#define MPU_SMPRT_DIV		(uint16_t)(0x19)
-#define MPU_CONFIG			(uint16_t)(0x1A)
-#define MPU_GYRO_CONFIG		(uint16_t)(0x1B)
-#define	MPU_ACCEL_CONFIG	(uint16_t)(0x1C)
-#define MPU_FIFO_EN			(uint16_t)(0x23) //Default desabilitado
-#define MPU_INT_ENABLE		(uint16_t)(0x38) //Default desabilitado
-#define MPU_INT_STATUS		(uint16_t)(0x3A) //Read only
+#define MPU_SMPRT_DIV		(uint8_t)(0x19)
+#define MPU_CONFIG			(uint8_t)(0x1A)
+#define MPU_GYRO_CONFIG		(uint8_t)(0x1B)
+#define	MPU_ACCEL_CONFIG	(uint8_t)(0x1C)
+#define MPU_FIFO_EN			(uint8_t)(0x23) //Default desabilitado
+#define MPU_INT_ENABLE		(uint8_t)(0x38) //Default desabilitado
+#define MPU_INT_STATUS		(uint8_t)(0x3A) //Read only
 
 // Registradores de leitura dos dados
 // Acelerômetro
-#define MPU_MEASURES		(uint16_t)(0x3B)
-#define MPU_ACCEL_XOUT_H	(uint16_t)(0x3B)
-#define MPU_ACCEL_XOUT_L	(uint16_t)(0x3C)
-#define MPU_ACCEL_YOUT_H	(uint16_t)(0x3D)
-#define MPU_ACCEL_YOUT_L	(uint16_t)(0x3E)
-#define MPU_ACCEL_ZOUT_H	(uint16_t)(0x3F)
-#define MPU_ACCEL_ZOUT_L	(uint16_t)(0x40)
+#define MPU_MEASURES		(uint8_t)(0x3B)
+#define MPU_ACCEL_XOUT_H	(uint8_t)(0x3B)
+#define MPU_ACCEL_XOUT_L	(uint8_t)(0x3C)
+#define MPU_ACCEL_YOUT_H	(uint8_t)(0x3D)
+#define MPU_ACCEL_YOUT_L	(uint8_t)(0x3E)
+#define MPU_ACCEL_ZOUT_H	(uint8_t)(0x3F)
+#define MPU_ACCEL_ZOUT_L	(uint8_t)(0x40)
 
 //Temperatura
-#define MPU_TEMP_OUT_H		(uint16_t)(0x41)
-#define MPU_TEMP_OUT_L		(uint16_t)(0x42)
+#define MPU_TEMP_OUT_H		(uint8_t)(0x41)
+#define MPU_TEMP_OUT_L		(uint8_t)(0x42)
 
 // Giroscópio
-#define MPU_GYRO_XOUT_H		(uint16_t)(0x43)
-#define MPU_GYRO_XOUT_L		(uint16_t)(0x44)
-#define MPU_GYRO_YOUT_H		(uint16_t)(0x45)
-#define MPU_GYRO_YOUT_L		(uint16_t)(0x46)
-#define MPU_GYRO_ZOUT_H		(uint16_t)(0x47)
-#define MPU_GYRO_ZOUT_L		(uint16_t)(0x48)
+#define MPU_GYRO_XOUT_H		(uint8_t)(0x43)
+#define MPU_GYRO_XOUT_L		(uint8_t)(0x44)
+#define MPU_GYRO_YOUT_H		(uint8_t)(0x45)
+#define MPU_GYRO_YOUT_L		(uint8_t)(0x46)
+#define MPU_GYRO_ZOUT_H		(uint8_t)(0x47)
+#define MPU_GYRO_ZOUT_L		(uint8_t)(0x48)
 
 // Sensores externos conectados a IMU
 // Leitura dos endereços 0x49 até 0x60
