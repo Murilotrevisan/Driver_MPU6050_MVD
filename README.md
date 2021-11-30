@@ -7,7 +7,7 @@ Repositório para confecção do driver de funções mínimas para funcionamento
 
 * sem leitura de sinais externos
 * filtro digital passa baixa de 260 Hz
-* atualização dos dados em 4 Hz
+* atualização dos dados em 10 Hz
 * giroscópio com range máximo de 250°/s
 * acelerômetro com range máximo de 2g
 
@@ -16,7 +16,7 @@ Repositório para confecção do driver de funções mínimas para funcionamento
 MPU6050_config_t config = {
     .FSyncEnable = MPU_FSYNC_DISABLE,
     .LowPassFilter = MPU_DLPF_CG0,
-    .Sample = MPU_SMPRT_4,
+    .Sample = MPU_SMPRT_10,
     .GyroRange = MPU_GFS_SEL_250,
     .AccelRange = MPU_AFS_SEL_2
 }
