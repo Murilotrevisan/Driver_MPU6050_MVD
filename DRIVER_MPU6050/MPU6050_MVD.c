@@ -68,19 +68,30 @@ error_t MPU6050_accel_config(MPU6050_t mpu) {
 	return i2c_write8(mpu.device, MPU_ACCEL_CONFIG, accel_config_reg);
 }
 
+error_t MPU6050_power(MPU6050 mpu) {
+
+	//Caso o valor de reset não seja o mesmo do datasheet usar esta parte comentada
+	//result8_t config_raw = i2c_read8(mpu.device, MPU_ACCEL_CONFIG);
+	//power_config_reg = config_raw.value
+
+	uint8_t power_config_reg = 0x00;
+
+	return i2c_write8(mpu.device, MPU_PWR_MGMT1, power_config_reg);
+}
+
 error_t MPU6050_init(MPU6050_t mpu) {
 
 	//Realiza todas as configurações em uma única função
 	//para facilitar a execução do programa na main
 
-	MPU6050_smprt(mpu);
-	MPU6050_config(mpu);
-	MPU6050_accel_config(mpu);
-	MPU6050_gyro_config(mpu);
+	MPU6050_power(mpu);			//Desabilita o reset e o sleep
+	MPU6050_smprt(mpu);			//Configura taxa de amostragem
+	MPU6050_config(mpu);		//Configurações gerais
+	MPU6050_accel_config(mpu);	//Configurações do acelerometro
+	MPU6050_gyro_config(mpu);	//Configurações do giroscopio
 
 	return 0;
 }
-
 
 
 /* Leituras do sensor */
@@ -93,7 +104,7 @@ error_t MPU6050_measure(MPU6050_t mpu, MPU6050_values_t *medida) {
 	//Armazena na struct de resultados
 
 	//Criação do buffer para leitura burst-read
-	uint8_t buffer[13] = { 0 };
+	uint8_t buffer[14] = { 0 };
 	buffer_view_t buffer_view =  { .data = buffer, .size = sizeof(buffer) };
 
 	//Leitura de todos os registradores de resultados e save no buffer
@@ -106,27 +117,41 @@ error_t MPU6050_measure(MPU6050_t mpu, MPU6050_values_t *medida) {
 
 	//Separação das componentes da leitura
 	//Acelerômetro
-	uint16_t accel_x = (buffer[0] << 8) | buffer[1];
-	uint16_t accel_y = (buffer[2] << 8) | buffer[3];
-	uint16_t accel_z = (buffer[4] << 8) | buffer[5];
+	int16_t accel_x = (buffer[0] << 8) | buffer[1];
+	int16_t accel_y = (buffer[2] << 8) | buffer[3];
+	int16_t accel_z = (buffer[4] << 8) | buffer[5];
 	//Temperatura
-	uint16_t temp    = (buffer[6] << 8) | buffer[7];
+	int16_t temp    = (buffer[6] << 8) | buffer[7];
 	//Giroscópio
-	uint16_t gyro_x  = (buffer[8] << 8) | buffer[9];
-	uint16_t gyro_y  = (buffer[10] << 8) | buffer[11];
-	uint16_t gyro_z  = (buffer[12] << 8) | buffer[13];
+	int16_t gyro_x  = (buffer[8] << 8) | buffer[9];
+	int16_t gyro_y  = (buffer[10] << 8) | buffer[11];
+	int16_t gyro_z  = (buffer[12] << 8) | buffer[13];
+
+	//Calculo das escalas de medição
+	//Acelerometro
+	int const fullScaleA = (mpu.config.AccelRange >> SCALE_SHIFT);	//Obtem o valor de fundo de escala selecionado (1-3)
+	int const invScaleA  = SCALE_INV_A - fullScaleA;				//Coloca em ordem decrescente o valor de escala(3-1)
+	int const bitScaleA  = (invScaleA + ACCEL_BIT);					//obtem o tamanho em bits do fundo de escala (11 - 14)
+	int const scaleAcc   = (BIT_DIV << bitScaleA);					//multiplica o valor e coloca em escala(2048 - 16384)
+	//Giroscopio
+	int const fullScaleG = (mpu.config.GyroRange >> SCALE_SHIFT);	//Obtem o valor de fundo de escala selecionado (1-3)
+	int const invScaleG  = SCALE_INV_G - fullScaleG;				//Coloca em ordem decrescente o valor de escala(3-1)
+	int const bitScaleG  = (invScaleG + GYRO_BIT);					//obtem o tamanho em bits do fundo de escala (11 - 14)
+	int const rangeGyr   = (BIT_DIV << bitScaleG);					//multiplica o valor e coloca em escala(2048 - 16384)
+	int const scaleGyr   = (rangeGyr / UNIT_DIV);					//ajusta a unidade de acelereção
+
 
 	//Alocação na struct de resultados
 	//Acelerômetro
-	medida -> AccelX = (float)accel_x;
-	medida -> AccelY = (float)accel_y;
-	medida -> AccelZ = (float)accel_z;
+	medida -> AccelX = ((float)accel_x / scaleAcc);
+	medida -> AccelY = ((float)accel_y / scaleAcc);
+	medida -> AccelZ = ((float)accel_z / scaleAcc);
 	//Temperatura
-	medida -> Temp   = (float)temp;
+	medida -> Temp   = ((float)temp / TMP_DIV_CONST) + TMP_SUM_CONST;
 	//Giroscópio
-	medida -> GyroX  = (float)gyro_x;
-	medida -> GyroY  = (float)gyro_y;
-	medida -> GyroZ  = (float)gyro_z;
+	medida -> GyroX  = ((float)gyro_x / scaleGyr);
+	medida -> GyroY  = ((float)gyro_y / scaleGyr);
+	medida -> GyroZ  = ((float)gyro_z / scaleGyr);
 
 	return 0;
 }

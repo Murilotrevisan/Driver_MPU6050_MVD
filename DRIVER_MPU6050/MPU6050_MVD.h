@@ -23,6 +23,7 @@
 #define MPU_FIFO_EN			(uint8_t)(0x23) //Default desabilitado
 #define MPU_INT_ENABLE		(uint8_t)(0x38) //Default desabilitado
 #define MPU_INT_STATUS		(uint8_t)(0x3A) //Read only
+#define MPU_PWR_MGMT_1		(uint8_t)(0x6B) //Manter desabilitado
 
 // Registradores de leitura dos dados
 // Acelerômetro
@@ -65,29 +66,29 @@
 
 //CONFIG
 // configuração da external frame synchronization
-#define MPU_FSYNC_DISABLE	(uint8_t)(0x00 << 5) //desabilita a leitura de sinais externos
+#define MPU_FSYNC_DISABLE	(uint8_t)(0x00 << 3) //desabilita a leitura de sinais externos
 // configuração do filtro digital passa baixa a ser utilizado
-#define MPU_DLPF_CG0		(uint8_t)(0x00 << 3) //A-260 G-256 Hz Digital low pass filter
-#define MPU_DLPF_CG1		(uint8_t)(0x01 << 3) //A-184 G-188 Hz
-#define MPU_DLPF_CG2		(uint8_t)(0x02 << 3) //A-94  G-98  Hz
-#define MPU_DLPF_CG3		(uint8_t)(0x03 << 3) //A-44  G-42  Hz
-#define MPU_DLPF_CG4		(uint8_t)(0x04 << 3) //A-21  G-20  Hz
-#define MPU_DLPF_CG5		(uint8_t)(0x05 << 3) //A-10  G-10  Hz
-#define MPU_DLPF_CG6		(uint8_t)(0x06 << 3) //A-05  G-05  Hz
+#define MPU_DLPF_CG0		(uint8_t)(0x00 << 0) //A-260 G-256 Hz Digital low pass filter
+#define MPU_DLPF_CG1		(uint8_t)(0x01 << 0) //A-184 G-188 Hz
+#define MPU_DLPF_CG2		(uint8_t)(0x02 << 0) //A-94  G-98  Hz
+#define MPU_DLPF_CG3		(uint8_t)(0x03 << 0) //A-44  G-42  Hz
+#define MPU_DLPF_CG4		(uint8_t)(0x04 << 0) //A-21  G-20  Hz
+#define MPU_DLPF_CG5		(uint8_t)(0x05 << 0) //A-10  G-10  Hz
+#define MPU_DLPF_CG6		(uint8_t)(0x06 << 0) //A-05  G-05  Hz
 
 //GYRO_CONFIG
 //Quanto maior o range menor a precisão do sensor
 //Relação precisão e range explicada no datasheet na parte do acelerometro
-#define MPU_GFS_SEL_250		(uint8_t)(0x00 << 4) //+- 250°/s
-#define MPU_GFS_SEL_500		(uint8_t)(0x01 << 4) //+- 500°/s
-#define MPU_GFS_SEL_1000	(uint8_t)(0x02 << 4) //+- 1000°/s
-#define MPU_GFS_SEL_2000	(uint8_t)(0x03 << 4) //+- 2000°/s
+#define MPU_GFS_SEL_250		(uint8_t)(0x00 << 3) //+- 250°/s
+#define MPU_GFS_SEL_500		(uint8_t)(0x01 << 3) //+- 500°/s
+#define MPU_GFS_SEL_1000	(uint8_t)(0x02 << 3) //+- 1000°/s
+#define MPU_GFS_SEL_2000	(uint8_t)(0x03 << 3) //+- 2000°/s
 
 //ACCEL_CONFIG
-#define MPU_AFS_SEL_2		(uint8_t)(0x00 << 4) //+-2g
-#define MPU_AFS_SEL_4		(uint8_t)(0x01 << 4) //+-4g
-#define MPU_AFS_SEL_8		(uint8_t)(0x02 << 4) //+-8g
-#define MPU_AFS_SEL_16		(uint8_t)(0x03 << 4) //+-16g
+#define MPU_AFS_SEL_2		(uint8_t)(0x00 << 3) //+-2g
+#define MPU_AFS_SEL_4		(uint8_t)(0x01 << 3) //+-4g
+#define MPU_AFS_SEL_8		(uint8_t)(0x02 << 3) //+-8g
+#define MPU_AFS_SEL_16		(uint8_t)(0x03 << 3) //+-16g
 
 //FIFO_EN
 #define MPU_FIFO_DISABLE	(uint8_t)(0x00) //Desabilita a FIFO
@@ -134,12 +135,25 @@ error_t MPU6050_smprt(MPU6050_t mpu);
 error_t MPU6050_config(MPU6050_t mpu);
 error_t MPU6050_gyro_config(MPU6050_t mpu);
 error_t MPU6050_accel_config(MPU6050_t mpu);
+error_t MPU6050_power(MPU6050_t mpu);
 
 //Função de configuração geral, aplica todas as configs
 error_t MPU6050_init(MPU6050_t mpu);
 
 //Função para leitura burst-read
 error_t MPU6050_measure(MPU6050_t mpu, MPU6050_values_t *medida);
+
+/* Constantes */
+
+#define SCALE_SHIFT		(int)(3)
+#define SCALE_INV_A		(int)(3)
+#define SCALE_INV_G		(int)(6)
+#define ACCEL_BIT		(int)(11)
+#define GYRO_BIT		(int)(11)
+#define BIT_DIV			(int)(1)
+#define UNIT_DIV		(float)(1000)
+#define TMP_DIV_CONST	(int)(340)
+#define TMP_SUM_CONST	(float)(36.53)
 
 
 
